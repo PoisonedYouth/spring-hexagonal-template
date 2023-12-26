@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <CurrentIssues>
+    <ID>UnusedPrivateProperty:AccountTable.kt$private const val MAXIMUM_NAME_LENGTH = 50</ID>
+  </CurrentIssues>
+</SmellBaseline>

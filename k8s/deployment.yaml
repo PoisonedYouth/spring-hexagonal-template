@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-hexagonal-template
+  labels:
+    app: spring-hexagonal-template
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-hexagonal-template
+  template:
+    metadata:
+      labels:
+        app: spring-hexagonal-template
+    spec:
+      initContainers:
+        - name: spring-hexagonal-template-postgresql-init
+          image: busybox
+          command: [ 'sh', '-c', 'echo -e "Checking for the availability of Postgresql Server deployment"; while ! nc -z spring-hexagonal-template-postgresql 5432; do sleep 1; printf "-"; done; echo -e "  >> Postgresql DB Server has started";' ]
+      containers:
+        - name: spring-hexagonal-template
+          image: spring-hexagonal-template:0.0.1
+          envFrom:
+            - configMapRef:
+                name: spring-hexagonal-template
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 5
+            timeoutSeconds: 30
+            periodSeconds: 1
+          ports:
+            - containerPort: 8080

@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  postgres:
+    container_name: "postgres_spring_hexagonal_template"
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: root
+      PGUSER: root
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db
+  application:
+    container_name: "spring-hexagonal-template"
+    image: spring-hexagonal-template:0.0.1
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: password

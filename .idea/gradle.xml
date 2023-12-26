@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/buildConfiguration" name="buildConfiguration">
+                <projects>
+                  <project path="$PROJECT_DIR$/buildConfiguration" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleHome" value="$PROJECT_DIR$/../../../gradle-8.0" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/application" />
+            <option value="$PROJECT_DIR$/bootstrap" />
+            <option value="$PROJECT_DIR$/buildConfiguration" />
+            <option value="$PROJECT_DIR$/common" />
+            <option value="$PROJECT_DIR$/domain" />
+            <option value="$PROJECT_DIR$/framework" />
+            <option value="$PROJECT_DIR$/konsist" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

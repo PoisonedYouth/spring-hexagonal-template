@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-hexagonal-template-postgresql
+  labels:
+    app: spring-hexagonal-template-postgresql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-hexagonal-template-postgresql
+  template:
+    metadata:
+      labels:
+        app: spring-hexagonal-template-postgresql
+    spec:
+      containers:
+        - name: spring-hexagonal-template-postgresql
+          image: postgres:16-alpine
+          env:
+            - name: POSTGRES_USER
+              value: "root"
+            - name: PGUSER
+              value: "root"
+            - name: POSTGRES_PASSWORD
+              value: "password"
+            - name: POSTGRES_DB
+              value: "db"
+          ports:
+            - containerPort: 5432
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-hexagonal-template-postgresql
+  labels:
+    app: spring-hexagonal-template-postgresql
+spec:
+  ports:
+    - port: 5432
+      protocol: TCP
+  selector:
+    app: spring-hexagonal-template-postgresql

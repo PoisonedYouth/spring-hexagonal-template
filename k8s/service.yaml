@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-hexagonal-template
+  labels:
+    app: spring-hexagonal-template
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30080
+      protocol: TCP
+  selector:
+    app: spring-hexagonal-template

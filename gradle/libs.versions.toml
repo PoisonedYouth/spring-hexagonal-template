@@ -1,0 +1,86 @@
+[versions]
+arrowStackVersion = "1.2.1"
+assertJVersion = "3.24.2"
+cucumberVersion = "7.15.0"
+detektVersion = "1.23.4"
+exposedVersion = "0.44.0"
+flywayVersion = "10.4.0"
+hikariVersion = "5.1.0"
+# keep
+javaVersion = "17"
+jacksonKotlinVersion = "2.16.0"
+junitVersion = "5.10.1"
+konsistVersion = "0.13.0"
+kotestVersion = "5.8.0"
+kotestArrowAssertionsVersion = "1.4.0"
+kotlinVersion = "1.9.21"
+ktfmtVersion = "0.15.1"
+mockitoKotlinVersion = "5.1.0"
+pitestJunit5Version = "1.2.0"
+pitestVersion = "1.15.0"
+postgresConnectorVersion = "42.7.0"
+springdocVersion="2.3.0"
+springBootVersion="3.2.0"
+springDependencyManagementVersion="1.1.4"
+springBootSecurityVersion="6.2.1"
+testcontainersVersion = "1.19.3"
+versionCatalogUpdateVersion = "0.8.1"
+versionUpdateVersion = "0.50.0"
+
+[libraries]
+arrowCore = { module = "io.arrow-kt:arrow-core" }
+arrowStack = { module = "io.arrow-kt:arrow-stack", version.ref = "arrowStackVersion" }
+assertJ = { module = "org.assertj:assertj-core", version.ref = "assertJVersion" }
+cucumberCore = { module = "io.cucumber:cucumber-bom", version.ref = "cucumberVersion"}
+cucumberJava = { module = "io.cucumber:cucumber-java"}
+cucumberPlatformEngine= { module = "io.cucumber:cucumber-junit-platform-engine"}
+exposedStarter= { module = "org.jetbrains.exposed:exposed-spring-boot-starter", version.ref = "exposedVersion"}
+exposedJavaTime= { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposedVersion"}
+flyway= { module = "org.flywaydb:flyway-core", version.ref = "flywayVersion"}
+flywayPostgresql= { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flywayVersion"}
+hikari= { module = "com.zaxxer:HikariCP", version.ref = "hikariVersion"}
+junitPlatformSuite = { module = "org.junit.platform:junit-platform-suite"}
+junitJupiterEngine = {module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junitVersion"}
+junitJupiterApi = {module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junitVersion"}
+jacksonKotlin = {module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jacksonKotlinVersion"}
+kotlinMockito = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlinVersion"}
+konsist = { module = "com.lemonappdev:konsist", version.ref = "konsistVersion"}
+kotlinReflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlinVersion"}
+# @keep - Used for convention plugins
+kotlinJvmLib = { module = "org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin", version.ref = "kotlinVersion" }
+kotest = { module = "io.kotest:kotest-assertions-core-jvm", version.ref = "kotestVersion"}
+kotestArrowAssertions = { module = "io.kotest.extensions:kotest-assertions-arrow", version.ref = "kotestArrowAssertionsVersion"}
+pitestJunit5 = { module = "org.pitest:pitest-junit5-plugin", version.ref = "pitestJunit5Version" }
+pitestPluginLib = { module = "info.solidsoft.pitest:info.solidsoft.pitest.gradle.plugin", version.ref = "pitestVersion" }
+postgresqlConnector = { module = "org.postgresql:postgresql", version.ref = "postgresConnectorVersion"}
+springBootStarterActuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "springBootVersion" }
+springBootStarterWeb = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "springBootVersion" }
+springBootStarterSecurity = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "springBootVersion" }
+springBootStarterJdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc", version.ref = "springBootVersion" }
+springBootStarterTest = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "springBootVersion" }
+springBootStarterSecurityTest = { module = "org.springframework.security:spring-security-test", version.ref = "springBootSecurityVersion" }
+springBootStarterTestcontainers = { module = "org.springframework.boot:spring-boot-testcontainers", version.ref = "springBootVersion" }
+springdocOpenApi = {module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdocVersion"}
+testContainersPostgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainersVersion" }
+testContainersCore = { module = "org.testcontainers:testcontainers", version.ref = "testcontainersVersion" }
+testContainersJunitJupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainersVersion" }
+
+[bundles]
+springbootLibraries = [
+    "springBootStarterActuator",
+    "springBootStarterJdbc",
+    "springBootStarterSecurity",
+    "springBootStarterWeb",
+]
+
+[plugins]
+catalogUpdate = { id = "nl.littlerobots.version-catalog-update", version.ref = "versionCatalogUpdateVersion" }
+springboot = { id = "org.springframework.boot", version.ref = "springBootVersion" }
+flyway = { id = "org.flywaydb.flyway", version.ref = "flywayVersion"}
+springDependencyManagement = {id = "io.spring.dependency-management", version.ref = "springDependencyManagementVersion"}
+versionUpdate = { id = "com.github.ben-manes.versions", version.ref = "versionUpdateVersion" }
+kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinVersion" }
+kotlinSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlinVersion" }
+ktfmtPlugin = { id = "com.ncorti.ktfmt.gradle", version.ref = "ktfmtVersion" }
+detektPlugin = { id = "io.gitlab.arturbosch.detekt", version.ref = "detektVersion" }
+pitestPlugin = { id = "info.solidsoft.pitest", version.ref = "pitestVersion" }
