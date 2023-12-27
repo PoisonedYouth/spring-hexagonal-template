@@ -6,9 +6,9 @@ import com.poisonedyouth.springhexagonaltemplate.domain.user.vo.Address
 import com.poisonedyouth.springhexagonaltemplate.domain.user.vo.Country
 import com.poisonedyouth.springhexagonaltemplate.domain.user.vo.Name
 import com.poisonedyouth.springhexagonaltemplate.domain.user.vo.ZipCode
-import com.poisonedyouth.springhexagonaltemplate.framework.configuration.ApplicationConfiguration
 import com.poisonedyouth.springhexagonaltemplate.framework.adapters.output.ClearDatabase
 import com.poisonedyouth.springhexagonaltemplate.framework.adapters.output.EnableTestcontainers
+import com.poisonedyouth.springhexagonaltemplate.framework.configuration.ApplicationConfiguration
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

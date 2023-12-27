@@ -4,5 +4,4 @@ metadata:
   name: spring-hexagonal-template
 data:
   SPRING_DATASOURCE_URL: "jdbc:postgresql://spring-hexagonal-template-postgresql:5432/db"
-  SPRING_DATASOURCE_USERNAME: "root"
-  SPRING_DATASOURCE_PASSWORD: "password"
+  POSTGRES_DB: "db"

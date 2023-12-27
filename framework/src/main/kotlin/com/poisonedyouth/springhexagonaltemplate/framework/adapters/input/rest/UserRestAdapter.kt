@@ -1,8 +1,8 @@
 package com.poisonedyouth.springhexagonaltemplate.framework.adapters.input.rest
 
-import com.poisonedyouth.springhexagonaltemplate.application.user.ports.input.UserDto
 import com.poisonedyouth.springhexagonaltemplate.application.user.usecases.ReadUserUseCase
 import com.poisonedyouth.springhexagonaltemplate.application.user.usecases.WriteUserUseCase
+import com.poisonedyouth.springhexagonaltemplate.common.vo.toIdentity
 import java.util.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -26,7 +26,7 @@ class UserRestAdapter(
         produces = [MediaType.APPLICATION_JSON_VALUE],
     )
     fun updateUser(@RequestBody user: UserDto): ResponseEntity<*> {
-        writeUserUseCase.update(user)
+        writeUserUseCase.update(user.toUser())
         return ResponseEntity.ok().build<Unit>()
     }
 
@@ -35,17 +35,17 @@ class UserRestAdapter(
         produces = [MediaType.APPLICATION_JSON_VALUE],
     )
     fun findUser(@RequestParam id: UUID): ResponseEntity<*> {
-        val existingUser = readUserUseCase.find(id)
+        val existingUser = readUserUseCase.find(id.toIdentity())
         return if (existingUser == null) {
             ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with id '$id' does not exist.")
         } else {
-            ResponseEntity.ok(existingUser)
+            ResponseEntity.ok(existingUser.toUserDto())
         }
     }
 
     @DeleteMapping
     fun deleteUser(@RequestParam id: UUID): ResponseEntity<*> {
-        writeUserUseCase.delete(id)
+        writeUserUseCase.delete(id.toIdentity())
         return ResponseEntity.accepted().build<Unit>()
     }
 
@@ -55,6 +55,6 @@ class UserRestAdapter(
         produces = [MediaType.APPLICATION_JSON_VALUE],
     )
     fun getAll(): ResponseEntity<*> {
-        return ResponseEntity.ok(readUserUseCase.all())
+        return ResponseEntity.ok(readUserUseCase.all().map { it.toUserDto() })
     }
 }

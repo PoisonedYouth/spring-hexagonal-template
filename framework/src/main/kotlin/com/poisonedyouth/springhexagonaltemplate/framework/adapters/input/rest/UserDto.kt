@@ -1,4 +1,4 @@
-package com.poisonedyouth.springhexagonaltemplate.application.user.ports.input
+package com.poisonedyouth.springhexagonaltemplate.framework.adapters.input.rest
 
 import com.poisonedyouth.springhexagonaltemplate.common.vo.Identity
 import com.poisonedyouth.springhexagonaltemplate.domain.user.entity.User

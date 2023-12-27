@@ -21,6 +21,10 @@ class DefaultUserDetailsService : UserDetailsService {
     )
 
     private fun findUser(username: String): UserCredentials? {
-        return UserCredentials(username = username, password = "0123456789")
+        return if (username == "ValidUserName") {
+            UserCredentials(username = username, password = "0123456789")
+        } else {
+            null
+        }
     }
 }

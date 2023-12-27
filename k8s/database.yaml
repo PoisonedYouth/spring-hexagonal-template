@@ -17,15 +17,11 @@ spec:
       containers:
         - name: spring-hexagonal-template-postgresql
           image: postgres:16-alpine
-          env:
-            - name: POSTGRES_USER
-              value: "root"
-            - name: PGUSER
-              value: "root"
-            - name: POSTGRES_PASSWORD
-              value: "password"
-            - name: POSTGRES_DB
-              value: "db"
+          envFrom:
+            - configMapRef:
+                name: spring-hexagonal-template
+            - secretRef:
+                name: spring-hexagonal-template
           ports:
             - containerPort: 5432
 ---
