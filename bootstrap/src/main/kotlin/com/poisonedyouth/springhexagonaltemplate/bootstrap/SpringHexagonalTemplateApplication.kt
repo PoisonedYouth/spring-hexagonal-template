@@ -11,7 +11,12 @@ import org.springframework.context.annotation.ComponentScan
 
 @SpringBootApplication
 @OpenAPIDefinition(
-    info = Info(title = "SpringHexagonalTemplate API", version = "0.0.1", description = "Sample Hexagonal Application")
+    info =
+        Info(
+            title = "SpringHexagonalTemplate API",
+            version = "0.0.1",
+            description = "Sample Hexagonal Application"
+        )
 )
 @SecurityScheme(
     name = "springhexagonaltemplate",

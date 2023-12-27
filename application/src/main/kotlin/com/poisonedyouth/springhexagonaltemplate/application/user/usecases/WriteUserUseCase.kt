@@ -1,13 +1,12 @@
 package com.poisonedyouth.springhexagonaltemplate.application.user.usecases
 
-import com.poisonedyouth.springhexagonaltemplate.application.user.ports.input.NewUserDto
-import com.poisonedyouth.springhexagonaltemplate.application.user.ports.input.UserDto
-import java.util.*
+import com.poisonedyouth.springhexagonaltemplate.common.vo.Identity
+import com.poisonedyouth.springhexagonaltemplate.domain.user.entity.User
 
 interface WriteUserUseCase {
-    fun add(user: NewUserDto): UUID
+    fun add(user: User): Identity
 
-    fun update(user: UserDto)
+    fun update(user: User)
 
-    fun delete(userId: UUID)
+    fun delete(userId: Identity)
 }

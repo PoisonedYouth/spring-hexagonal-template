@@ -17,7 +17,7 @@ tasks.withType<PitestTask> {
     jvmArgs = listOf("-Xmx16G")
     avoidCallsTo = listOf("kotlin.jvm.internal")
     failWhenNoMutations = false
-    targetClasses = listOf("com.poisonedyouth.spring-hexagonal-template.*")
+    targetClasses = listOf("com.poisonedyouth.springhexagonaltemplate.*")
 }
 
 extensions.configure(PitestPluginExtension::class){

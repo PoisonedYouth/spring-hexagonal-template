@@ -24,6 +24,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: spring-hexagonal-template
+            - secretRef:
+                name: spring-hexagonal-template
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness

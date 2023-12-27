@@ -36,7 +36,7 @@ class SecurityConfiguration {
     }
 
     @Bean
-    fun userDetailsService(): UserDetailsService {
-        return DefaultUserDetailsService()
+    fun userDetailsService(passwordEncoder: PasswordEncoder): UserDetailsService {
+        return DefaultUserDetailsService(passwordEncoder)
     }
 }

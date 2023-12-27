@@ -1,6 +1,5 @@
 package com.poisonedyouth.springhexagonaltemplate.framework.adapters.input.rest
 
-import com.poisonedyouth.springhexagonaltemplate.application.user.ports.input.NewUserDto
 import com.poisonedyouth.springhexagonaltemplate.application.user.usecases.WriteUserUseCase
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -20,6 +19,6 @@ class AuthenticationRestAdapter(private val writeUserUseCase: WriteUserUseCase) 
         produces = [MediaType.APPLICATION_JSON_VALUE],
     )
     fun addUser(@RequestBody user: NewUserDto): ResponseEntity<*> {
-        return ResponseEntity(writeUserUseCase.add(user), HttpStatus.CREATED)
+        return ResponseEntity(writeUserUseCase.add(user.toUser()), HttpStatus.CREATED)
     }
 }

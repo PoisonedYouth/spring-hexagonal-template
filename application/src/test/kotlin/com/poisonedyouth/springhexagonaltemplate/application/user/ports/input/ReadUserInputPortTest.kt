@@ -1,7 +1,7 @@
 package com.poisonedyouth.springhexagonaltemplate.application.user.ports.input
 
 import com.poisonedyouth.springhexagonaltemplate.application.user.ports.output.UserOutputPort
-import com.poisonedyouth.springhexagonaltemplate.common.vo.Identity
+import com.poisonedyouth.springhexagonaltemplate.common.vo.toIdentity
 import com.poisonedyouth.springhexagonaltemplate.domain.user.entity.User
 import com.poisonedyouth.springhexagonaltemplate.domain.user.vo.Address
 import com.poisonedyouth.springhexagonaltemplate.domain.user.vo.Country
@@ -22,10 +22,10 @@ class ReadUserInputPortTest {
     @Test
     fun `should return userDto when user exists`() {
         // Given
-        val userId = UUID.randomUUID()
+        val userId = UUID.randomUUID().toIdentity()
         val user =
             User(
-                identity = Identity.UUIDIdentity(userId),
+                identity = userId,
                 name = Name("John", "Doe"),
                 address =
                     Address(
@@ -36,7 +36,7 @@ class ReadUserInputPortTest {
                         Country("United States", "USA")
                     )
             )
-        whenever(userOutputPort.findBy(Identity.UUIDIdentity(userId))).thenReturn(user)
+        whenever(userOutputPort.findBy(userId)).thenReturn(user)
 
         // When
         val result = readUserInputPort.find(userId)
@@ -44,15 +44,15 @@ class ReadUserInputPortTest {
         // Then
         assertThat(result).isNotNull
         assertThat(result?.identity).isEqualTo(userId)
-        assertThat(result?.firstName).isEqualTo("John")
-        assertThat(result?.lastName).isEqualTo("Doe")
+        assertThat(result?.name?.firstName).isEqualTo("John")
+        assertThat(result?.name?.lastName).isEqualTo("Doe")
     }
 
     @Test
     fun `should return null when user does not exist`() {
         // Given
-        val userId = UUID.randomUUID()
-        whenever(userOutputPort.findBy(Identity.UUIDIdentity(userId))).thenReturn(null)
+        val userId = UUID.randomUUID().toIdentity()
+        whenever(userOutputPort.findBy(userId)).thenReturn(null)
 
         // When
         val result = readUserInputPort.find(userId)

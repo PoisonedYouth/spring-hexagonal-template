@@ -4,29 +4,25 @@ import com.poisonedyouth.springhexagonaltemplate.application.user.ports.output.U
 import com.poisonedyouth.springhexagonaltemplate.application.user.usecases.WriteUserUseCase
 import com.poisonedyouth.springhexagonaltemplate.common.exception.NotFoundException
 import com.poisonedyouth.springhexagonaltemplate.common.vo.Identity
-import java.util.*
+import com.poisonedyouth.springhexagonaltemplate.domain.user.entity.User
 
 class WriteUserInputPort(
     private val userOutputPort: UserOutputPort,
 ) : WriteUserUseCase {
-    override fun add(user: NewUserDto): UUID {
-        val mappedUser = user.toUser()
-        return userOutputPort.store(mappedUser).getId()
+    override fun add(user: User): Identity {
+        return userOutputPort.store(user)
     }
 
-    override fun update(user: UserDto) {
-        val mappedUser = user.toUser()
-        requireNotNull(userOutputPort.findBy(mappedUser.identity)) {
+    override fun update(user: User) {
+        requireNotNull(userOutputPort.findBy(user.identity)) {
             "User with id '${user.identity} does not exist."
         }
-        userOutputPort.store(mappedUser)
+        userOutputPort.store(user)
     }
 
-    override fun delete(userId: UUID) {
-        val userIdentity = Identity.UUIDIdentity(userId)
-        val user =
-            userOutputPort.findBy(userIdentity)
-                ?: throw NotFoundException("User with id '${userIdentity} does not exist.")
-        userOutputPort.delete(userIdentity)
+    override fun delete(userId: Identity) {
+        userOutputPort.findBy(userId)
+            ?: throw NotFoundException("User with id '${userId.getId()} does not exist.")
+        userOutputPort.delete(userId)
     }
 }

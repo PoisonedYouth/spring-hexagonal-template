@@ -49,15 +49,4 @@ class ArchitectureTest {
                 import.name.startsWith("com.poisonedyouth.springhexagonaltemplate.framework")
             }
     }
-
-    @Test
-    fun `input adapters not use domain models`() {
-        Konsist.scopeFromProduction()
-            .files
-            .withPackage("com.poisonedyouth.springhexagonaltemplate.framework.adapters.input..")
-            .imports
-            .assertFalse { importN ->
-                importN.name.startsWith("com.poisonedyouth.springhexagonaltemplate.domain")
-            }
-    }
 }

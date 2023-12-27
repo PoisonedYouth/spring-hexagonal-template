@@ -2,15 +2,18 @@ package com.poisonedyouth.springhexagonaltemplate.framework.adapters.input.rest
 
 // Kotlin imports
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.poisonedyouth.springhexagonaltemplate.application.user.ports.input.AddressDto
-import com.poisonedyouth.springhexagonaltemplate.application.user.ports.input.CountryDto
-import com.poisonedyouth.springhexagonaltemplate.application.user.ports.input.UserDto
 import com.poisonedyouth.springhexagonaltemplate.application.user.usecases.ReadUserUseCase
 import com.poisonedyouth.springhexagonaltemplate.application.user.usecases.WriteUserUseCase
 import com.poisonedyouth.springhexagonaltemplate.common.exception.NotFoundException
 import com.poisonedyouth.springhexagonaltemplate.common.vo.Identity
-import com.poisonedyouth.springhexagonaltemplate.framework.configuration.ApplicationConfiguration
+import com.poisonedyouth.springhexagonaltemplate.common.vo.toIdentity
+import com.poisonedyouth.springhexagonaltemplate.domain.user.entity.User
+import com.poisonedyouth.springhexagonaltemplate.domain.user.vo.Address
+import com.poisonedyouth.springhexagonaltemplate.domain.user.vo.Country
+import com.poisonedyouth.springhexagonaltemplate.domain.user.vo.Name
+import com.poisonedyouth.springhexagonaltemplate.domain.user.vo.ZipCode
 import com.poisonedyouth.springhexagonaltemplate.framework.adapters.input.rest.security.SecurityConfiguration
+import com.poisonedyouth.springhexagonaltemplate.framework.configuration.ApplicationConfiguration
 import java.util.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -21,7 +24,6 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
-import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
@@ -30,7 +32,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest(UserRestAdapter::class)
 @Import(ApplicationConfiguration::class, SecurityConfiguration::class)
-@ContextConfiguration(classes = [TestSecurityConfiguration::class])
 class UserRestAdapterTest {
     @Autowired private lateinit var mockMvc: MockMvc
 
@@ -44,18 +45,21 @@ class UserRestAdapterTest {
     @WithMockUser(username = "test", password = "test")
     fun `given non-existing user id, when findUser is called, return not found status`() {
         // given
-        val id = UUID.randomUUID()
+        val id = UUID.randomUUID().toIdentity()
         whenever(readUserUseCase.find(id)).thenReturn(null)
 
         // when
         val result =
             mockMvc.perform(
-                get("/api/v1/user").contentType(MediaType.APPLICATION_JSON).queryParam("id", "$id")
+                get("/api/v1/user")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .queryParam("id", "${id.value}")
             )
 
         // then
         result.andExpect(status().isNotFound()).andExpect { res ->
-            assertThat(res.response.contentAsString).isEqualTo("User with id '$id' does not exist.")
+            assertThat(res.response.contentAsString)
+                .isEqualTo("User with id '${id.value}' does not exist.")
         }
     }
 
@@ -63,34 +67,52 @@ class UserRestAdapterTest {
     @WithMockUser(username = "test", password = "test")
     fun `given existing user id, when findUser is called, then return user details`() {
         // given
-        val id = UUID.randomUUID()
-        val userDto =
-            UserDto(
+        val id = UUID.randomUUID().toIdentity()
+        val user =
+            User(
                 identity = id,
-                firstName = "John",
-                lastName = "Doe",
+                name = Name(firstName = "John", lastName = "Doe"),
                 address =
-                    AddressDto(
+                    Address(
                         streetName = "Street",
                         streetNumber = "123",
                         city = "City",
-                        zipCode = 123456,
-                        country = CountryDto(name = "Country", code = "CR")
+                        zipCode = ZipCode(12346),
+                        country = Country(name = "Country", code = "CR")
                     )
             )
-        whenever(readUserUseCase.find(id)).thenReturn(userDto)
+        whenever(readUserUseCase.find(id)).thenReturn(user)
 
         // when
         val result =
             mockMvc.perform(
-                get("/api/v1/user").contentType(MediaType.APPLICATION_JSON).queryParam("id", "$id")
+                get("/api/v1/user")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .queryParam("id", "${id.value}")
             )
 
         // then
         result.andExpect(status().isOk()).andExpect { res ->
             assertThat(objectMapper.readValue(res.response.contentAsString, UserDto::class.java))
-                .isEqualTo(userDto)
+                .isEqualTo(user.toUserDto())
         }
+    }
+
+    @Test
+    fun `given existing user id, when findUser is called without credentials, then not authorized is returned`() {
+        // given
+        val id = UUID.randomUUID().toIdentity()
+
+        // when
+        val result =
+            mockMvc.perform(
+                get("/api/v1/user")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .queryParam("id", "${id.value}")
+            )
+
+        // then
+        result.andExpect(status().isUnauthorized())
     }
 
     @Test
@@ -131,17 +153,16 @@ class UserRestAdapterTest {
         // given
         val identity = Identity.UUIDIdentity.NEW
         val user =
-            UserDto(
-                identity = identity.value,
-                firstName = "John",
-                lastName = "Doe",
+            User(
+                identity = identity,
+                name = Name(firstName = "John", lastName = "Doe"),
                 address =
-                    AddressDto(
+                    Address(
                         streetName = "Street",
                         streetNumber = "123",
                         city = "City",
-                        zipCode = 12345,
-                        country = CountryDto(name = "Country", code = "CR")
+                        zipCode = ZipCode(12345),
+                        country = Country(name = "Country", code = "CR")
                     )
             )
 
@@ -183,7 +204,7 @@ class UserRestAdapterTest {
         // given
         val identity = Identity.UUIDIdentity.NEW
 
-        whenever(writeUserUseCase.delete(identity.value)).thenThrow(NotFoundException("Failed!"))
+        whenever(writeUserUseCase.delete(identity)).thenThrow(NotFoundException("Failed!"))
 
         // when
         val result =
@@ -201,8 +222,6 @@ class UserRestAdapterTest {
     fun `delete user when user not send authorization header, return not authorized`() {
         // given
         val identity = Identity.UUIDIdentity.NEW
-
-        whenever(writeUserUseCase.delete(identity.value)).thenThrow(NotFoundException("Failed!"))
 
         // when
         val result =
